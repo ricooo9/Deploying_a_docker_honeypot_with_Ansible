@@ -1,0 +1,26 @@
+---
+- hosts: honeypot
+  tasks:
+    - name: Install vsftpd package
+      apt:
+        name: vsftpd
+        state: present
+
+    - name: Configuration de vsftpd
+      template:
+        src: ftp_configuration
+        dest: /etc/vsftpd.conf
+      notify:
+        - restart vsftpd
+
+    - name: S'assurer qu'il est lancé
+      service:
+        name: vsftpd
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: restart vsftpd
+      service:
+        name: vsftpd
+        state: restarted
