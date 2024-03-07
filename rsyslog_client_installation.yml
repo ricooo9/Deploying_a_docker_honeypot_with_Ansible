@@ -1,0 +1,36 @@
+---
+- name: Configuration de rsyslog sur le serveur Honeypot
+  hosts: honeypot
+  tasks:
+    - name: Installation de rsyslog
+      apt:
+        name: rsyslog
+        state: present
+
+    - name: Configuration du transfert des logs FTP vers le serveur rsyslog
+      lineinfile:
+        path: /etc/rsyslog.conf
+        insertafter: EOF
+        line: '*.* @172.17.0.4:514'
+      notify: Restart rsyslog
+
+    - name: Configuration de l'envoi des logs d'accès d'Apache2
+      blockinfile:
+        path: /etc/rsyslog.conf
+        insertafter: EOF
+        block: |
+          $ModLoad imfile
+          $InputFileName /var/log/apache2/access.log
+          $InputFileTag apache-access:
+          $InputFileStateFile state-apache-access
+          $InputFileSeverity info
+          $InputFileFacility local6
+          $InputRunFileMonitor
+          local6.* @172.17.0.4:514
+      notify: Restart rsyslog
+
+  handlers:
+    - name: Restart rsyslog
+      service:
+        name: rsyslog
+        state: restarted

@@ -1,0 +1,36 @@
+---
+- hosts: rsyslog
+  tasks:
+    - name: Installation de rsyslog
+      apt:
+        name: rsyslog
+        state: present
+
+    - name: Décommenter les lignes dans le fichier de configuration rsyslog
+      replace:
+        path: /etc/rsyslog.conf
+        regexp: '#(module\(load="imudp"\))'
+        replace: '\1'
+      notify: Restart rsyslog
+
+    - name: Décommenter la deuxième ligne dans le fichier de configuration rsyslog
+      replace:
+        path: /etc/rsyslog.conf
+        regexp: '#(input\(type="imudp" port="514"\))'
+        replace: '\1'
+      notify: Restart rsyslog
+
+    - name: Ajouter des lignes à la fin du fichier de configuration rsyslog
+    #Cela va nous servir à répertorier les logs par client (pour ne pas mélanger ceux du Honeypot et ceux de la machine RSYSLOG même)
+      blockinfile:
+        path: /etc/rsyslog.conf
+        block: |
+          $template syslog,"/var/log/clients/%fromhost%/syslog.log"
+          *.* ?syslog
+      notify: Restart rsyslog
+
+  handlers:
+    - name: Restart rsyslog
+      service:
+        name: rsyslog
+        state: restarted
