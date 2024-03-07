@@ -1,0 +1,12 @@
+---
+- hosts : honeypot
+  tasks:
+    - name: Installation d'Apache
+      apt:
+        name: apache2
+        state: present
+    
+    - name : Demarrage d'Apache
+      service:
+        name: apache2
+        state: started
