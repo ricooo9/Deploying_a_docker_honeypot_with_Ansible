@@ -24,7 +24,7 @@ On my job I'll be working mainly with 3 types of files: Dockerfile to create ima
 
 ## First step :
 
-You need to download the main folder containing all the files, then go to its root.
+You need to download the main folder containing all the files and then go to its root or you can simply copy and paste the commands below.
 
 Then launch Docker, open a cmd in the downloaded folder and copy and paste these commands.
 
