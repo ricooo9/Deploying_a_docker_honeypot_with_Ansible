@@ -29,6 +29,8 @@ You need to download the main folder containing all the files, then go to its ro
 Then launch Docker, open a cmd in the downloaded folder and copy and paste these commands.
 
 ```powershell
+git clone https://github.com/ricooo9/Deploying_a_docker_honeypot_with_Ansible.git
+cd .\Deploying_a_docker_honeypot_with_Ansible\
 docker build -t image_ansible -f Dockerfile .
 docker container run -d --name ansible image_ansible
 docker cp ansible:/root/.ssh/id_rsa.pub authorized_keys
