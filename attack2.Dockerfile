@@ -7,6 +7,6 @@ RUN apt update -y && \
 #Copie du script SSH et on le rend exécutable
 COPY ssh.sh /
 RUN chmod +x ssh.sh 
-
+RUN sed -i -e 's/\r$//' ssh.sh
 # Script lancé au démarrage pour effectuer une connexion SSH vers le Honeypot puis rester actif
 CMD ./ssh.sh
