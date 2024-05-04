@@ -14,6 +14,9 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 COPY script_iptables.sh /
 RUN chmod +x script_iptables.sh
 
+#Suppression des caractères de retour chariot (CR) à la fin des lignes du fichier script_iptables.sh
+RUN sed -i -e 's/\r$//' script_iptables.sh
+
 #Exposition du port 80 de sorte à visualiser le site Web depuis la machine hôte
 EXPOSE 80
 
